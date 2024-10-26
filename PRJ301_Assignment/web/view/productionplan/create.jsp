@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Create a new production plan</title>
+        <title>New Production Plan</title>
     </head>
     <body>
         <form action="create" method="POST"> 

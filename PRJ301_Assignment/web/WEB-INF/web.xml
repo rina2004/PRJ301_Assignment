@@ -4,5 +4,22 @@
 	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
 	 version="6.0">
+    
+<welcome-file>index.html</welcome-file>
+  
+<servlet>
+    <servlet-name>ProductionPlanCreateController</servlet-name>
+    <servlet-class>controller.ProductionPlanCreateController</servlet-class>
+</servlet>
 
+<servlet-mapping>
+    <servlet-name>ProductionPlanCreateController</servlet-name>
+    <url-pattern>/productionplan/create</url-pattern>
+</servlet-mapping>
+
+<session-config> 
+    <session-timeout>
+        30
+    </session-timeout>
+</session-config>
 </web-app>

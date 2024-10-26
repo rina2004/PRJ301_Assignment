@@ -74,7 +74,7 @@ public class UserDBContext extends DBContext<User> {
                 + "    ,[password]\n"
                 + "    ,[displayname]\n"
                 + "FROM [User]\n"
-                + "WHERE username = ? AND [password] = ?";
+                + "WHERE [username] = ? AND [password] = ?";
 
         PreparedStatement stm = null;
         User user = null;

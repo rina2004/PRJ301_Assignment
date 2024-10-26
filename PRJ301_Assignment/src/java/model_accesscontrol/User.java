@@ -47,5 +47,4 @@ public class User {
     public void setDisplayname(String displayname) {
         this.displayname = displayname;
     }
-    
 }
