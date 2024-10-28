@@ -14,7 +14,7 @@ import model.Product;
 
 /**
  *
- * @author sonnt-local
+ * @author Rinaaaa
  */
 public class ProductDBContext extends DBContext<Product> {
 
@@ -66,7 +66,21 @@ public class ProductDBContext extends DBContext<Product> {
 
     @Override
     public Product get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        Product product = null;
+        String sql = "SELECT [id], [name] FROM [Product] WHERE [id] = ?";
 
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return product;
+    }
 }
