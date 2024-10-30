@@ -5,33 +5,66 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <title>Production Plan Detail</title>
     </head>
     <body>
         <h2>Details for Plan ID: ${plan.id}</h2>
-        <p>Department: ${plan.dept.name}</p>
+        <p>Department: 
+            <c:choose>
+                <c:when test="${not empty plan.dept.name}">
+                    ${plan.dept.name}
+                </c:when>
+                <c:otherwise>
+                    Not available
+                </c:otherwise>
+            </c:choose>
+        </p>
         <p>Start Date: ${plan.start}</p>
         <p>End Date: ${plan.end}</p>
 
-        <table border="1">
-            <tr>
-                <th>Campaign</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Estimated Effort</th>
-            </tr>
-            <c:forEach items="${plan.campaigns}" var="campaign">
-                <tr>
-                    <td>${campaign.id}</td>
-                    <td>${campaign.product.name}</td>
-                    <td>${campaign.quantity}</td>
-                    <td>${campaign.estimatedEffort}</td>
-                </tr>
-            </c:forEach>
-        </table>
+        <h3>Campaigns</h3>
+        <c:if test="${not empty plan.campaigns}">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Campaign ID</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Estimated Effort</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${plan.campaigns}" var="campaign">
+                        <tr>
+                            <td>${campaign.id}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty campaign.product.name}">
+                                        ${campaign.product.name}
+                                    </c:when>
+                                    <c:otherwise>
+                                        Not specified
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>${campaign.quantity}</td>
+                            <td>${campaign.estimatedEffort}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
+        <c:if test="${empty plan.campaigns}">
+            <p>No campaigns available for this plan.</p>
+        </c:if>
+
+        <form action="detail" method="GET">
+            
+        </form>
     </body>
 </html>

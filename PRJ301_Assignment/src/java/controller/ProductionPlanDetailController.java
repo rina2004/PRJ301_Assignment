@@ -42,15 +42,29 @@ public class ProductionPlanDetailController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        int planID = Integer.parseInt(request.getParameter("id"));
-        
-        PlanDBContext planDB = new PlanDBContext();
-        Plan plan = planDB.get(planID);
-        
-        request.setAttribute("plan", plan);
-        request.getRequestDispatcher("../view/productionplan/detail.jsp").forward(request, response);
-    } 
+            throws ServletException, IOException {
+        try {
+            int planID = Integer.parseInt(request.getParameter("id"));
+
+            PlanDBContext planDB = new PlanDBContext();
+            Plan plan = planDB.get(planID);
+
+            if (plan != null) {
+                request.setAttribute("plan", plan);
+                request.getRequestDispatcher("../view/productionplan/detail.jsp").forward(request, response);
+            } else {
+                request.setAttribute("error", "Plan not found.");
+                request.getRequestDispatcher("../view/error.jsp").forward(request, response);
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid Plan ID.");
+            request.getRequestDispatcher("../view/error.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            request.setAttribute("error", "An unexpected error occurred.");
+            request.getRequestDispatcher("../view/error.jsp").forward(request, response);
+        }
+    }
+
 
     /** 
      * Handles the HTTP <code>POST</code> method.

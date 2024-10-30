@@ -10,8 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Department;
 import model.Plan;
 import model.PlanCampaign;
+import model.Product;
 
 /**
  *
@@ -123,7 +125,6 @@ public class PlanDBContext extends DBContext<Plan> {
             Logger.getLogger(PlanDBContext.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                stm.close();
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(PlanDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,48 +136,53 @@ public class PlanDBContext extends DBContext<Plan> {
     @Override
     public Plan get(int id) {
         Plan plan = null;
-        String sqlPlan = "SELECT [id], [did], [startDate], [endDate] FROM [dbo].[Plan] WHERE [id] = ?";
-        String sqlCampaign = """
-                             SELECT [id], [pid], [quantity], [estimatedEffort]
-                             FROM [dbo].[PlanCampaign] WHERE [plid] = 1"""; 
-        PreparedStatement stmPlan = null;
-        PreparedStatement stmCampaign = null;
-           
+        DepartmentDBContext dpmDB = new DepartmentDBContext();
+        ProductDBContext prdDB = new ProductDBContext();
+        
+        String sql = """
+            SELECT p.id AS plan_id, p.did AS dept_id, p.startDate, p.endDate,
+                   pl.id AS campaign_id, pl.pid AS product_id, pl.quantity, pl.estimatedEffort
+            FROM dbo.[Plan] p INNER JOIN dbo.[PlanCampaign] pl ON p.id = pl.plid
+            WHERE p.id = ?
+        """;
+        PreparedStatement stm = null;
         try {
-            stmPlan = connection.prepareStatement(sqlPlan);
-            stmPlan.setInt(1, id);
-            ResultSet rsPlan = stmPlan.executeQuery();
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
 
-            if (rsPlan.next()) {
-                plan = new Plan();
-                plan.setId(rsPlan.getInt("id"));
-                plan.setDept(new DepartmentDBContext().get(rsPlan.getInt("did")));
-                plan.setStart(rsPlan.getDate("startDate"));
-                plan.setEnd(rsPlan.getDate("endDate"));
-                
-                ArrayList<PlanCampaign> campaigns = new ArrayList<>();
-                plan.setCampaigns(campaigns);
+            while (rs.next()) {
+                if (plan == null) {
+                    plan = new Plan();
+                    plan.setId(rs.getInt("plan_id"));
 
-                stmCampaign = connection.prepareStatement(sqlCampaign);
-                stmCampaign.setInt(1, id);
-                ResultSet rsCampaign = stmCampaign.executeQuery();
-                while (rsCampaign.next()) {
-                    PlanCampaign campaign = new PlanCampaign();
-                    campaign.setId(rsCampaign.getInt("id"));
-                    campaign.setProduct(new ProductDBContext().get(rsCampaign.getInt("pid")));
-                    campaign.setQuantity(rsCampaign.getInt("quantity"));
-                    campaign.setEstimatedEffort(rsCampaign.getFloat("estimatedEffort"));
+                    plan.setDept(dpmDB.get(rs.getInt("dept_id")));
 
-                    campaigns.add(campaign);
+                    plan.setStart(rs.getDate("startDate"));
+                    plan.setEnd(rs.getDate("endDate"));
+                    plan.setCampaigns(new ArrayList<>());
                 }
+
+                PlanCampaign camp = new PlanCampaign();
+                camp.setId(rs.getInt("campaign_id"));
+
+                camp.setProduct(prdDB.get(rs.getInt("product_id")));
+
+                camp.setQuantity(rs.getInt("quantity"));
+                camp.setEstimatedEffort(rs.getFloat("estimatedEffort"));
+
+                plan.getCampaigns().add(camp);
             }
         } catch (SQLException ex) {
             Logger.getLogger(PlanDBContext.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                stmPlan.close();
-                stmCampaign.close();
-                connection.close();
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(PlanDBContext.class.getName()).log(Level.SEVERE, null, ex);
             }
