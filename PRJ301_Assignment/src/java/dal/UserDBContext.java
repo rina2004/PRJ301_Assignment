@@ -20,13 +20,14 @@ public class UserDBContext extends DBContext<User> {
 
     public ArrayList<Role> getRoles(String username) {
         ArrayList<Role> roles = new ArrayList<>();
-        String sql = "SELECT r.rid,r.rname,f.fid,f.fname,f.url FROM [User] u \n"
-                + "	INNER JOIN UserRole ur ON ur.username = u.username\n"
-                + "	INNER JOIN [Role] r ON r.rid = ur.rid\n"
-                + "	INNER JOIN RoleFeature rf ON rf.rid = r.rid\n"
-                + "	INNER JOIN Feature f ON f.fid = rf.fid\n"
-                + "WHERE u.username = ?\n"
-                + "ORDER BY r.rid ASC, f.fid ASC";
+        String sql = """
+                     SELECT r.rid,r.rname,f.fid,f.fname,f.url FROM [User] u 
+                     \tINNER JOIN UserRole ur ON ur.username = u.username
+                     \tINNER JOIN [Role] r ON r.rid = ur.rid
+                     \tINNER JOIN RoleFeature rf ON rf.rid = r.rid
+                     \tINNER JOIN Feature f ON f.fid = rf.fid
+                     WHERE u.username = ?
+                     ORDER BY r.rid ASC, f.fid ASC""";
         
         PreparedStatement stm = null;
         try {

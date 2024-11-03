@@ -4,6 +4,7 @@
  */
 package controller;
 
+import controller_accesscontrol.BaseRBACController;
 import dal.PlanDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,12 +12,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model_accesscontrol.User;
 
 /**
  *
  * @author Rinaaaa
  */
-public class ProductionPlanListController extends HttpServlet {
+public class ProductionPlanListController extends BaseRBACController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,13 +40,6 @@ public class ProductionPlanListController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        PlanDBContext planDB = new PlanDBContext();
-        request.setAttribute("plans", planDB.list());
-        request.getRequestDispatcher("../view/productionplan/list.jsp").forward(request, response);
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -54,12 +49,6 @@ public class ProductionPlanListController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-    }
-
     /**
      * Returns a short description of the servlet.
      *
@@ -69,5 +58,17 @@ public class ProductionPlanListController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    @Override
+    protected void doAuthorizedGet(HttpServletRequest request, HttpServletResponse response, User loggeduser) throws ServletException, IOException {
+        PlanDBContext planDB = new PlanDBContext();
+        request.setAttribute("plans", planDB.list());
+        request.getRequestDispatcher("../view/productionplan/list.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doAuthorizedPost(HttpServletRequest req, HttpServletResponse resp, User loggeduser) throws ServletException, IOException {
+        
+    }
 
 }
