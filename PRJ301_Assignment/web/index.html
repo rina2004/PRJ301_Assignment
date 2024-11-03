@@ -9,16 +9,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
     <title>Production Scheduling System</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://fonts.googleapis.com/css?family=Material Symbols Rounded' rel='stylesheet'>    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">    
     <link href="./css/index.css" rel="stylesheet">
     <script src="script/script.js" defer></script>
 </head>
 
 <body>
     <header>
-        <!--Navbar-->>
+        <!--Navbar-->
         <nav class="navbar">
-            <a href="#" class="logo">
+            <a href="index.html" class="logo">
                 <img src="./images/logo.jpg" alt="logo">
                 <h2>ABC Company</h2>
             </a>
@@ -37,12 +37,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <h2>LOGIN</h2>
                     <form action="login" method="POST">
                         <div class="input-field">
-                            <input type="text" required />
-                            <label for="username">Username</label>
+                            <input type="text" name="username" required/>
+                            <label>Username</label>
                         </div>
                         <div class="input-field">
-                            <input type="password" required />
-                            <label for="password">Password</label>
+                            <input type="password" name="password" required/>
+                            <label>Password</label>
                         </div>
                         <button type="submit">Log In</button>
                     </form>
@@ -51,5 +51,4 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         </div>
     </header>
 </body>
-
 </html>

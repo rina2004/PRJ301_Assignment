@@ -5,9 +5,9 @@
 
 package controller;
 
+import controller_accesscontrol.BaseRBACController;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Date;
@@ -19,12 +19,13 @@ import model.PlanCampaign;
 import dal.ProductDBContext;
 import dal.DepartmentDBContext;
 import dal.PlanDBContext;
+import model_accesscontrol.User;
 
 /**
  *
  * @author Rinaaaa
  */
-public class ProductionPlanCreateController extends HttpServlet {
+public class ProductionPlanCreateController extends BaseRBACController {
    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -34,15 +35,6 @@ public class ProductionPlanCreateController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        ProductDBContext dbProduct = new ProductDBContext();
-        DepartmentDBContext dbDept = new DepartmentDBContext();
-        request.setAttribute("products", dbProduct.list());
-        request.setAttribute("depts", dbDept.get("workshop"));
-        request.getRequestDispatcher("../view/productionplan/create.jsp").forward(request, response);
-    } 
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -52,8 +44,16 @@ public class ProductionPlanCreateController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+    protected void doAuthorizedGet(HttpServletRequest request, HttpServletResponse response, User loggeduser) throws ServletException, IOException {
+        ProductDBContext dbProduct = new ProductDBContext();
+        DepartmentDBContext dbDept = new DepartmentDBContext();
+        request.setAttribute("products", dbProduct.list());
+        request.setAttribute("depts", dbDept.get("workshop"));
+        request.getRequestDispatcher("../view/productionplan/create.jsp").forward(request, response);    
+    }
+
+    @Override
+    protected void doAuthorizedPost(HttpServletRequest request, HttpServletResponse response, User loggeduser) throws ServletException, IOException {
         String[] pids = request.getParameterValues("pid");
         
         Plan plan = new Plan();
