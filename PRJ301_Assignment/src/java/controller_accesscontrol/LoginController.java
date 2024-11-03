@@ -32,7 +32,7 @@ public class LoginController extends HttpServlet {
     throws ServletException, IOException {
         
         //
-        request.getRequestDispatcher("login.html").forward(request, response);
+        request.getRequestDispatcher("index.html").forward(request, response);
         //
     } 
 

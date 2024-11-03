@@ -13,6 +13,10 @@
         <servlet-name>ProductionPlanListController</servlet-name>
         <servlet-class>controller.ProductionPlanListController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ScheduleCampaignCreateController</servlet-name>
+        <servlet-class>controller.ScheduleCampaignCreateController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductionPlanCreateController</servlet-name>
         <url-pattern>/productionplan/create</url-pattern>
@@ -24,6 +28,10 @@
     <servlet-mapping>
         <servlet-name>ProductionPlanListController</servlet-name>
         <url-pattern>/productionplan/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ScheduleCampaignCreateController</servlet-name>
+        <url-pattern>/schedulecampaign/create</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

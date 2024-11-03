@@ -12,6 +12,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.sql.Date;
+import java.util.Calendar;
 import model.Plan;
 
 /**
@@ -48,7 +51,7 @@ public class ProductionPlanDetailController extends HttpServlet {
 
             PlanDBContext planDB = new PlanDBContext();
             Plan plan = planDB.get(planID);
-
+            
             if (plan != null) {
                 request.setAttribute("plan", plan);
                 request.getRequestDispatcher("../view/productionplan/detail.jsp").forward(request, response);
@@ -76,7 +79,7 @@ public class ProductionPlanDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        doGet(request, response);
     }
 
     /** 
@@ -87,5 +90,4 @@ public class ProductionPlanDetailController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

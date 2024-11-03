@@ -10,10 +10,10 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Production Plan Detail</title>
+        <title>Production Plan Schedule</title>
     </head>
     <body>
-        <h2>Details for Plan ID: ${plan.id}</h2>
+        <h1>Details for Plan ID: ${plan.id}</h1>
         <p>Department: 
             <c:choose>
                 <c:when test="${not empty plan.dept.name}">
@@ -32,7 +32,7 @@
             <table border="1">
                 <thead>
                     <tr>
-                        <th>Campaign ID</th>
+                        <th>Campaign</th>
                         <th>Product Name</th>
                         <th>Quantity</th>
                         <th>Estimated Effort</th>
@@ -62,9 +62,5 @@
         <c:if test="${empty plan.campaigns}">
             <p>No campaigns available for this plan.</p>
         </c:if>
-
-        <form action="detail" method="GET">
-            
-        </form>
     </body>
 </html>
