@@ -21,7 +21,7 @@ public class UserDBContext extends DBContext<User> {
     public ArrayList<Role> getRoles(String username) {
         ArrayList<Role> roles = new ArrayList<>();
         String sql = """
-                     SELECT r.id,r.[name],f.id,f.[name],f.[url] FROM [User] u 
+                     SELECT r.id as rid, r.[name] as rname, f.id as fid, f.[name] as fname, f.[url] as url FROM [User] u 
                                           INNER JOIN UserRole ur ON ur.username = u.username
                                           INNER JOIN [Role] r ON r.id = ur.roleID
                                           INNER JOIN RoleFeature rf ON rf.roleID = r.id
