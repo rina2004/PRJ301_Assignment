@@ -21,13 +21,13 @@ public class UserDBContext extends DBContext<User> {
     public ArrayList<Role> getRoles(String username) {
         ArrayList<Role> roles = new ArrayList<>();
         String sql = """
-                     SELECT r.rid,r.rname,f.fid,f.fname,f.url FROM [User] u 
-                     \tINNER JOIN UserRole ur ON ur.username = u.username
-                     \tINNER JOIN [Role] r ON r.rid = ur.rid
-                     \tINNER JOIN RoleFeature rf ON rf.rid = r.rid
-                     \tINNER JOIN Feature f ON f.fid = rf.fid
-                     WHERE u.username = ?
-                     ORDER BY r.rid ASC, f.fid ASC""";
+                     SELECT r.id,r.[name],f.id,f.[name],f.[url] FROM [User] u 
+                                          INNER JOIN UserRole ur ON ur.username = u.username
+                                          INNER JOIN [Role] r ON r.id = ur.roleID
+                                          INNER JOIN RoleFeature rf ON rf.roleID = r.id
+                                          INNER JOIN Feature f ON f.id = rf.featureID
+                                          WHERE u.username = ?
+                                          ORDER BY r.id ASC, f.id ASC""";
         
         PreparedStatement stm = null;
         try {
@@ -127,4 +127,9 @@ public class UserDBContext extends DBContext<User> {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    
+    public static void main(String[] args) {
+        UserDBContext userDB = new UserDBContext();
+        userDB.getRoles("truongphong");
+    }
 }
